@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
    config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
+  #    vb.gui = true
    end
 
    # install stuff
@@ -29,7 +29,7 @@ Vagrant.configure(2) do |config|
    config.vm.provision "shell", inline: "sudo gpasswd -a vagrant docker"
    config.ssh.forward_agent = true
 
-   config.vm.network "private_network", ip: "192.168.0.10", netmask "255.255.0.0"
+   config.vm.network "private_network", ip: "192.168.0.10", netmask: "255.255.0.0"
    config.vm.provider :virtualbox do |vb|
 	  vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
 	end
@@ -46,4 +46,6 @@ Vagrant.configure(2) do |config|
 
    # configure vim
    config.vm.provision "shell", path: "sh/configure-vim.sh"
+
+   config.vm.synced_folder "~/git", "/home/vagrant/git"
 end
