@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
   #   # Display the VirtualBox GUI when booting the machine
   #    vb.gui = true
    end
-  config.vm.hostname "devbox"
+  config.vm.hostname = "devbox"
 
    # install stuff
 
@@ -25,17 +25,23 @@ Vagrant.configure(2) do |config|
    # install oh-my-zsh
    config.vm.provision "shell", path: "sh/install-oh-my-zsh.sh"
 	
+   # configure vim
+   config.vm.provision "shell", path: "sh/configure-vim.sh"
+
+   config.vm.synced_folder "~/git", "/home/vagrant/git"
+   
+   # create private network
+   config.vm.network "private_network", ip: "192.168.0.10", netmask: "255.255.0.0"
+   config.vm.provider :virtualbox do |vb|
+	  vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+	end
+
    # install docker
    config.vm.provision "docker"
 
    # create docker group
    config.vm.provision "shell", inline: "sudo gpasswd -a vagrant docker"
    config.ssh.forward_agent = true
-
-   config.vm.network "private_network", ip: "192.168.0.10", netmask: "255.255.0.0"
-   config.vm.provider :virtualbox do |vb|
-	  vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-	end
 
 #   forward port 8080
 #   config.vm.network "forwarded_port", guest: 8080, host: 8080 
@@ -47,8 +53,4 @@ Vagrant.configure(2) do |config|
    # install docker compose, and docker completion 
    config.vm.provision "shell", path: "sh/install-docker-compose.sh"
 
-   # configure vim
-   config.vm.provision "shell", path: "sh/configure-vim.sh"
-
-   config.vm.synced_folder "~/git", "/home/vagrant/git"
 end
