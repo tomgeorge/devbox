@@ -27,6 +27,7 @@ Vagrant.configure(2) do |config|
 	
    # install docker
    config.vm.provision "docker"
+
    # create docker group
    config.vm.provision "shell", inline: "sudo gpasswd -a vagrant docker"
    config.ssh.forward_agent = true
@@ -36,12 +37,12 @@ Vagrant.configure(2) do |config|
 	  vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
 	end
 
-   # forward port 8080
-   config.vm.network "forwarded_port", guest: 8080, host: 8080 
-   config.vm.network "forwarded_port", guest: 80, host: 80 
-   config.vm.network "forwarded_port", guest: 8083, host: 8083
-   config.vm.network "forwarded_port", guest: 8086, host: 8086
-   config.vm.network "forwarded_port", guest: 9000, host: 9000
+#   forward port 8080
+#   config.vm.network "forwarded_port", guest: 8080, host: 8080 
+#   config.vm.network "forwarded_port", guest: 80, host: 80 
+#   config.vm.network "forwarded_port", guest: 8083, host: 8083
+#   config.vm.network "forwarded_port", guest: 8086, host: 8086
+#   config.vm.network "forwarded_port", guest: 9000, host: 9000
 
    # install docker compose, and docker completion 
    config.vm.provision "shell", path: "sh/install-docker-compose.sh"
