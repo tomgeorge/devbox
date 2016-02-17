@@ -29,11 +29,11 @@ VOLUME /var/shared
 WORKDIR /home/dev
 ENV HOME /home/dev
 
-ADD vimrc /home/dev/.vimrc
-ADD zshrc /home/dev/.zshrc
-ADD gitconfig /home/dev/.gitconfig
-ADD tmux.conf /home/dev/.tmux.conf
-ADD bashrc /home/dev/.bashrc
+ADD dotfiles/vimrc /home/dev/.vimrc
+ADD dotfiles/zshrc /home/dev/.zshrc
+ADD dotfiles/gitconfig /home/dev/.gitconfig
+ADD dotfiles/tmux.conf /home/dev/.tmux.conf
+ADD dotfiles/bashrc /home/dev/.bashrc
 ADD vim /home/dev/.vim
 
 RUN ln -s /var/shared/.ssh
