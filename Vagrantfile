@@ -8,10 +8,12 @@ Vagrant.configure(2) do |config|
   #   # Display the VirtualBox GUI when booting the machine
   #    vb.gui = true
    end
+  config.vm.hostname "devbox"
 
    # install stuff
 
    # Stuff that ends in || true could possibly fail silently.  Don't forget to check when debugging.
+  
 
    
    # install some utilities
