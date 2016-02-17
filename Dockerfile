@@ -1,6 +1,9 @@
 FROM ubuntu
 MAINTAINER Tom George
 
+# ENV http_proxy http://10.0.2.2:3128
+# ENV https_proxy https://10.0.2.2:3128
+
 RUN apt-get update -y
 RUN apt-get install -y vim \
 	wget \
@@ -33,11 +36,10 @@ ADD dotfiles/vimrc /home/dev/.vimrc
 ADD dotfiles/zshrc /home/dev/.zshrc
 ADD dotfiles/gitconfig /home/dev/.gitconfig
 ADD dotfiles/tmux.conf /home/dev/.tmux.conf
-ADD dotfiles/bashrc /home/dev/.bashrc
 ADD vim /home/dev/.vim
 
 RUN ln -s /var/shared/.ssh
-RUN git clone https://github.com/robbyrussell/oh-my-zsh.git /home/dev/.oh-my-zsh
+RUN git clone https://github.com/tomgeorge/oh-my-zsh.git /home/dev/.oh-my-zsh
 
 RUN chown -R dev:dev /home/dev
 USER dev
