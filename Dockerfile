@@ -11,7 +11,8 @@ RUN apt-get install -y vim \
 	git  \
 	zsh \
 	dos2unix \
-	tmux
+	tmux \
+    vim-gtk
 
 RUN useradd dev
 RUN mkdir /home/dev 
