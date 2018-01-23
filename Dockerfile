@@ -38,6 +38,9 @@ VOLUME /var/shared
 
 WORKDIR /home/dev
 ENV HOME /home/dev
+RUN mkdir -p /home/dev/.local/share/nvim/shada && \
+        touch /home/dev/.local/share/nvim/shada/main.shada && \
+        chmod -R 775 /home/dev/.local
 
 RUN git clone https://github.com/tomgeorge/oh-my-zsh.git ~/.oh-my-zsh
 RUN git clone https://github.com/tomgeorge/dotfiles
