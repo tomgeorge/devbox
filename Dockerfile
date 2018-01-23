@@ -15,7 +15,9 @@ RUN apt-get update && \
         dos2unix \
         tmux \
         build-essential \
-        git
+        git \
+        apt-file \
+        python3-pip
 
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
     apt-get update && \ 
@@ -42,7 +44,11 @@ RUN git clone https://github.com/tomgeorge/dotfiles
 RUN git clone https://github.com/tomgeorge/vimfiles /home/dev/.vim
 
 RUN cd dotfiles && ./links.sh
-RUN nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c h qa -V || true
+
+RUN pip3 install neovim
+
+RUN nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true
+RUN nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
 
 RUN ln -s /var/shared/.ssh
 
