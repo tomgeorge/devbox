@@ -32,7 +32,7 @@ VOLUME /var/shared
 WORKDIR /home/dev
 ENV HOME /home/dev
 
-RUN git clone https://github.com/tomgeorge/oh-my-zsh.git
+RUN git clone https://github.com/tomgeorge/oh-my-zsh.git ~/.oh-my-zsh
 RUN git clone https://github.com/tomgeorge/dotfiles
 RUN git clone https://github.com/tomgeorge/vimfiles /home/dev/.vim
 
@@ -45,3 +45,4 @@ ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
 
 ENTRYPOINT ["docker_entrypoint.sh"]
+CMD ["/usr/bin/zsh"]
