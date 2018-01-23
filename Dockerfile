@@ -5,16 +5,21 @@ MAINTAINER Tom George
 # ENV https_proxy https://10.0.2.2:3128
 
 # ADD 01proxy /etc/apt/apt.conf.d
-RUN apt-get update -y
-RUN apt-get install -y vim \
-	wget \
-	curl \
-    libcurl4-openssl-dev \
-	zsh \
-	dos2unix \
-	tmux \
-    build-essential \
-    git
+RUN apt-get update && \
+    apt-get install -y vim \
+        software-properties-common \
+        wget \
+        curl \
+        libcurl4-openssl-dev \
+        zsh \
+        dos2unix \
+        tmux \
+        build-essential \
+        git
+
+RUN add-apt-repository ppa:neovim-ppa/unstable && \
+    apt-get update && \ 
+    apt-get install -y neovim
 
 ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/bin/gosu
 RUN chmod 775 /usr/local/bin/gosu
@@ -37,7 +42,7 @@ RUN git clone https://github.com/tomgeorge/dotfiles
 RUN git clone https://github.com/tomgeorge/vimfiles /home/dev/.vim
 
 RUN cd dotfiles && ./links.sh
-RUN vim -E -s -c "source ~/.vimrc" -c PluginInstall -c qa -V || true
+RUN nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c h qa -V || true
 
 RUN ln -s /var/shared/.ssh
 
