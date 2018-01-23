@@ -1,46 +1,47 @@
-FROM ubuntu
+FROM ubuntu:14.04
 MAINTAINER Tom George
 
 # ENV http_proxy http://10.0.2.2:3128
 # ENV https_proxy https://10.0.2.2:3128
 
+# ADD 01proxy /etc/apt/apt.conf.d
 RUN apt-get update -y
 RUN apt-get install -y vim \
 	wget \
 	curl \
-	git  \
+    libcurl4-openssl-dev \
 	zsh \
 	dos2unix \
 	tmux \
-    vim-gtk
+    build-essential \
+    git
 
-RUN useradd dev
+ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/bin/gosu
+RUN chmod 775 /usr/local/bin/gosu
+
 RUN mkdir /home/dev 
 RUN mkdir -p /home/dev/bin /home/dev/lib /home/dev/include
 ENV PATH /home/dev/bin:$PATH
-ENV LD_LIBRARY_PATH /home/dev/lib
+ENV LD_LIBRARY_PATH /home/dev/lib:$LD_LIBRARY_PATH
 
 
-# Create a shared data volume
-# We need to create an empty file, otherwise the volume will
-# belong to root.
-# This is probably a Docker bug.
 RUN mkdir /var/shared/
 RUN touch /var/shared/placeholder
-RUN chown -R dev:dev /var/shared
 VOLUME /var/shared
 
 WORKDIR /home/dev
 ENV HOME /home/dev
 
-ADD dotfiles/vimrc /home/dev/.vimrc
-ADD dotfiles/zshrc /home/dev/.zshrc
-ADD dotfiles/gitconfig /home/dev/.gitconfig
-ADD dotfiles/tmux.conf /home/dev/.tmux.conf
-ADD vim /home/dev/.vim
+RUN git clone https://github.com/tomgeorge/oh-my-zsh.git
+RUN git clone https://github.com/tomgeorge/dotfiles
+RUN git clone https://github.com/tomgeorge/vimfiles /home/dev/.vim
+
+RUN cd dotfiles && ./links.sh
+RUN vim -E -s -c "source ~/.vimrc" -c PluginInstall -c qa -V || true
 
 RUN ln -s /var/shared/.ssh
-RUN git clone https://github.com/tomgeorge/oh-my-zsh.git /home/dev/.oh-my-zsh
 
-RUN chown -R dev:dev /home/dev
-USER dev
+ADD docker_entrypoint.sh /usr/local/bin
+RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
+
+ENTRYPOINT ["docker_entrypoint.sh"]
