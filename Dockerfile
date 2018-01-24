@@ -6,6 +6,7 @@ MAINTAINER Tom George
 ENV GO_VERSION 1.9.3.linux-amd64
 
 # ADD 01proxy /etc/apt/apt.conf.d
+
 RUN apt-get update && \
         apt-get install -y vim \
         software-properties-common \
@@ -19,8 +20,6 @@ RUN apt-get update && \
         git \
         apt-file \
         python3-pip \
-        linux-image-extra-$(uname -r) \
-        linux-image-extra-virtual \
         apt-transport-https \
         ca-certificates
 
@@ -29,19 +28,21 @@ ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/
 RUN chmod 775 /usr/local/bin/gosu
 
 ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
-ENV PATH /usr/local/go/bin:$PATH
+RUN cd /usr/local && tar -xvf go$GO_VERSION.tar.gz && rm go$GO_VERSION.tar.gz
 RUN mkdir -p /home/dev/go
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu$(lsb_release -cs) stable" && \
+        add-apt-repository ppa:ansible/ansible && \
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) \
+        stable" && \
         apt-get update && \ 
-        apt-get install -y docker-ce neovim
+        apt-get install -y docker-ce neovim ansible
 
-RUN mkdir /home/dev 
 RUN mkdir -p /home/dev/bin /home/dev/lib /home/dev/include
-ENV PATH /home/dev/bin:$PATH
+ENV PATH /home/dev/bin:/usr/local/go/bin:$PATH
 ENV LD_LIBRARY_PATH /home/dev/lib:$LD_LIBRARY_PATH
 
 
@@ -70,6 +71,8 @@ RUN ln -s /var/shared/.ssh
 
 ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
+
+ENV LANG en_US.utf8
 
 ENTRYPOINT ["docker_entrypoint.sh"]
 CMD ["/usr/bin/zsh"]
