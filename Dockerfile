@@ -3,10 +3,11 @@ MAINTAINER Tom George
 
 # ENV http_proxy http://10.0.2.2:3128
 # ENV https_proxy https://10.0.2.2:3128
+ENV GO_VERSION 1.9.3.linux-amd64
 
 # ADD 01proxy /etc/apt/apt.conf.d
 RUN apt-get update && \
-    apt-get install -y vim \
+        apt-get install -y vim \
         software-properties-common \
         wget \
         curl \
@@ -17,14 +18,26 @@ RUN apt-get update && \
         build-essential \
         git \
         apt-file \
-        python3-pip
+        python3-pip \
+        linux-image-extra-$(uname -r) \
+        linux-image-extra-virtual \
+        apt-transport-https \
+        ca-certificates
 
-RUN add-apt-repository ppa:neovim-ppa/unstable && \
-    apt-get update && \ 
-    apt-get install -y neovim
 
 ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/bin/gosu
 RUN chmod 775 /usr/local/bin/gosu
+
+ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
+ENV PATH /usr/local/go/bin:$PATH
+RUN mkdir -p /home/dev/go
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+RUN add-apt-repository ppa:neovim-ppa/unstable && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu$(lsb_release -cs) stable" && \
+        apt-get update && \ 
+        apt-get install -y docker-ce neovim
 
 RUN mkdir /home/dev 
 RUN mkdir -p /home/dev/bin /home/dev/lib /home/dev/include
