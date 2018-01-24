@@ -73,6 +73,7 @@ ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
 
 ENV LANG en_US.utf8
+RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["docker_entrypoint.sh"]
 CMD ["/usr/bin/zsh"]
