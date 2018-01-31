@@ -69,7 +69,7 @@ RUN git clone https://github.com/tomgeorge/oh-my-zsh.git ~/.oh-my-zsh && \
         cd dotfiles && \
         ./links.sh
 
-RUN pip3 install neovim && \
+RUN pip3 install neovim awscli && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
 
