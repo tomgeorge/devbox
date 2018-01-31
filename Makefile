@@ -4,8 +4,11 @@ build:
 tag: build
 	docker tag devbox tomgeorge/devbox:master
 
-push: tag
+login:
+	docker login 
+
+push: tag login
 	docker push tomgeorge/devbox:master
 
-tmux:
+tmux: tag
 	docker run -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:master tmux -2
