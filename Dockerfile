@@ -78,7 +78,7 @@ RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
 
 ENV LANG en_US.utf8
 
-RUN wget https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482
+RUN wget https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 && unzip terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 -d /usr/local/bin && rm terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482
 
 ENTRYPOINT ["docker_entrypoint.sh"]
 CMD ["/usr/bin/zsh"]
