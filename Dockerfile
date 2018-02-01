@@ -29,6 +29,11 @@ RUN apt-get update && \
 ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/bin/gosu
 RUN chmod 775 /usr/local/bin/gosu
 
+RUN curl -L https://github.com/docker/compose/releases/download/1.19.0-rc2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && \
+	chmod +x /usr/local/bin/docker-compose
+
+
+
 ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
 RUN cd /usr/local && \
         tar -xvf go$GO_VERSION.tar.gz && \
