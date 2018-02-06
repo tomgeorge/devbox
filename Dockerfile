@@ -5,6 +5,8 @@ MAINTAINER Tom George
 # ENV https_proxy https://10.0.2.2:3128
 ENV GO_VERSION 1.9.3.linux-amd64
 
+ARG DOCKER_GID
+
 # ADD 01proxy /etc/apt/apt.conf.d
 
 RUN apt-get update && \
@@ -48,6 +50,7 @@ RUN cd /usr/local && \
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
+RUN groupadd -g $DOCKER_GID docker
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
         add-apt-repository ppa:ansible/ansible && \
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \

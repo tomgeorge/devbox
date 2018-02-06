@@ -1,5 +1,6 @@
+DOCKER_GID := $(shell stat -c %g /var/run/docker.sock)
 build:
-	docker build -t devbox .
+	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox .
 
 tag: build
 	docker tag devbox tomgeorge/devbox:master
