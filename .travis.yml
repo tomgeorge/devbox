@@ -1,3 +1,9 @@
 sudo: required
+
+languages: go
+
 services:
   - docker
+
+script:
+  - build.sh
