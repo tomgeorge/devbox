@@ -1,12 +1,11 @@
 Vagrant configuration and a Dockerfile that acts similarly.
 
+### Provisioning a droplet on DigitalOcean
 
-```
-docker run -it tomgeorge/devbox /usr/bin/env zsh
-```
+First scp your ssh keys into the droplet
 
-If you're behind a proxy, like when you're at work:
+Then run `sh/provision_droplet.sh`.  This makes a user called `dev` with password `dev`, and gives it the ssh keys to authenticate with github.
 
-```
-docker run --net host -it tomgeorge/devbox /usr/bin/env zsh
-```
+Running `build.sh` builds the docker image.
+
+`make dev` runs the image and grabs voulmes from a gopath and ssh_keys image (to be automated)
