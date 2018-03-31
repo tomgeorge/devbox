@@ -1,2 +1,2 @@
 #!/bin/bash
-DOCKER_GID = 999 make
+DOCKER_GID=999 make
