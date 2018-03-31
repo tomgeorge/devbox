@@ -14,9 +14,9 @@ DOCKER_USER:
 DOCKER_PASS:
   secure: gGBlWKGknbQz2pKECGmpXik6ie/KcBEn9c7UOnAajAeiCmpnNP1PuJzRbZNjd3c54XT1Ct6IhlwFZ7X5ZkymrDfrLXXV98L3RuelD16fWYxfSV6COKLe9dcV5z2ame3xHqIqUQnlnCNbN0KlxqVxcToXEaGI7knGUHoD0BaWhT0Y20d+uG70f/cQ7ob1fNaShzYdMc7JVee5NyD/WJ0YW0m7oa7wCSYwE/e+iCJ3Lhr9oGjExHF1fvsChrAwEjXdC8T34KrlNDh9CDvylNsZdN9M07xRFwHC6TK1lgESj/CChdGixM1hj6EkL4RqafTHqKj5udkmBCJCpzPpfoL6CrtYQVg0XF0GDSbxLnG7usZUOEIfYMZpQt7Awkpo3ypO+OAeFkHxV3JNTtePh3QvztPVfTc8Rr3vjX/hnumura0VCeI0Ha2WVb9jF25pNxswDxCZigOZwylQXG10Fb/1IhJr/feMI04BylWpQaZ2LgwnfLMnQMDhTp+2HdqyMdw2yDuvBUXDPv+iGRwDjt/brDY3JkllIxnqjEyTe6Q1yk56JefcBoPCk2LJXzdkw8xWv+pFmkbbKKWKBgaKHUxFB1vP4t/sFJtmlEbwFd5xe7vK7fZkvX2soHRT6xfkpu7ybz4yoH4Z7DXBySANUh+zoH1Ei1RjjOg1kBHcY/S5gzw=
 after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=tomgeorge/devbox
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+  - docker tag devbox $REPO:$TAG
+  - docker tag devbox $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO:$TAG
