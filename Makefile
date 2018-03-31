@@ -19,3 +19,7 @@ tmux: tag
 
 dev:
 	docker run --volumes-from ssh-keys --volumes-from gopath --volumes-from minikube --volumes-from kubeconfig --volumes-from git_vol -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:master
+
+dev_ssh:
+	docker run --volumes-from ssh-keys -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:master
+	
