@@ -8,4 +8,8 @@ useradd -Ums /bin/bash dev
 echo "dev:dev"|chpasswd
 echo 'dev	ALL=(ALL:ALL) ALL' >> /etc/sudoers
 usermod -aG docker dev
-
+mkdir -p ~dev/.ssh 
+chown -R dev:dev ~dev/.ssh
+cp ~/.ssh/authorized_keys ~dev/.ssh/authorized_keys
+cp ~/.ssh/id_rsa* ~dev/.ssh/
+chown -R dev:dev ~dev/.ssh/*
