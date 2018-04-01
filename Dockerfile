@@ -12,7 +12,7 @@ ARG DOCKER_GID
 # ADD 01proxy /etc/apt/apt.conf.d
 
 RUN apt-get update && \
-        apt-get install -y vim \
+        apt-get -q install -y vim \
         software-properties-common \
         wget \
         curl \
