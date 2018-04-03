@@ -19,3 +19,5 @@ cp ~/.ssh/id_rsa* ~dev/.ssh/
 chown -R dev:dev ~dev/.ssh/*
 
 cd sh && ./make_ssh_keys_image.sh && cd -
+
+echo "set -o vi >> ~dev/.bashrc"
