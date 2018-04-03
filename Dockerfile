@@ -45,7 +45,7 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.19.0-rc2/docke
 
 ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
 RUN cd /usr/local && \
-        tar -xvf go$GO_VERSION.tar.gz && \
+        tar -xf go$GO_VERSION.tar.gz && \
         rm go$GO_VERSION.tar.gz && \
         mkdir -p /home/dev/go \
                  /home/dev/bin \
@@ -98,7 +98,7 @@ RUN wget https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VER
         mv kubectl /usr/local/bin
 
 RUN wget https://github.com/istio/istio/releases/download/0.5.1/istio-$ISTIO_VERSION-linux.tar.gz && \
-        tar -xvf istio-$ISTIO_VERSION-linux.tar.gz && \
+        tar -xf istio-$ISTIO_VERSION-linux.tar.gz && \
         mv istio-$ISTIO_VERSION/bin/istioctl /usr/local/bin && \
         chmod +x /usr/local/bin/istioctl && \
         rm -rf istio-$ISTIO_VERSION
