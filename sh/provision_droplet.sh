@@ -18,4 +18,4 @@ cp ~/.ssh/authorized_keys ~dev/.ssh/authorized_keys
 cp ~/.ssh/id_rsa* ~dev/.ssh/
 chown -R dev:dev ~dev/.ssh/*
 
-cd sh && make_ssh_keys_image.sh && cd -
+cd sh && ./make_ssh_keys_image.sh && cd -
