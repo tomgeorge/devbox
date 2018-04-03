@@ -6,15 +6,14 @@ script:
 - DOCKER_GID=999 make
 env:
   global:
-  - COMMIT=${TRAVIS_COMMIT::8}
+  - COMMIT=${TRAVIS_COMMIT::5}
   - secure: HLWOlNSIkGkD1TkzUaFaOtluFirfQ7gDcnBWQb5S3hB7PJ/jqjAASrGuZTmvcyihB5a5wvk9Eq/PCWBVQ2zdn/m+/TNSS3BKHxltBr6/QC1L7RAfpI8OU5CcWYEWadr60Y9Zsj7hv1I+rEbd4EGn1PqF1uGOKSKThIiV/EvQHZeAzRG+9sdCgcNtsJu2gqxDP73Pnf3GhRTXqlo7CFIdO8JBHz4g7eMdYQlKK1ftHgz7zEKCSvAE/xactWH9dHaDW+MgZ5wu6Yw+vNeq+Wbf/ENXdKvwI211mgcLF/4CZXx+DpRAa9T8a0bxWPuv2flF7zvDgMg8PJNdV6HCfYcTQcCneEhkVLEEfLwVkX/BFdGrAlCh8VCmTIg7vWr/iNPIH63zjE2NABl92RTpRloXA1m1dIcmXx9ZHrY6D6t1uYZuQ0MfKE6fZzPhRnUpTogqkQnbbqEx0pjN8E3MW1Gbp69f2vVpxYTcevfTR0ESFnYfj36o6W1xKMaPVvmkgkIBlr0AQAHY0tTQwarw1X76lgB31LmF8zTEEQu4ExJaqdnQduFTAzsb4k+c9cFsBAFXUiuj7tb/9E1KuypOMFYWAxmXhqhTQI4yv1lZIELCidoKHhQiXzXW1idtwBA7r8QRy7uOnxtawI37Wd7PRV0piwbpcrnfxWP7GRsq/iQoxYc=
   - secure: Ac6nZHQ2ANGHKEwma3V4fU+JXnD+3A3oY3MmKB/qr3sn/IjdThJrd9/0F6lzoaJ5+mOaLuLXupLoUOCtjAvLtkt2YwBrDmHnZfXygYC5/QCyWtmECdQF9hKFdgImOLPiRiJzr50vhEdygtYuYgTrp2OkXGv2guuXHciSvniWD+Wqhjx2Xku3Vv4tlE92Ai5K+QXl/AUUBLTkxShlegNJoTS5h3uF5ws2kHEUEOOeM/BZOWpwKqkkbis8XhtVYf4WE1nZGmbt7xE6LxKDzojfgHK62jDymgQ558yHUmVJSdemaoBMispHvjheYco41npEdK1Bb9oFNoYxHb66cWObbnKvHSZi9Z2pkvFUHJGb0yJuaq94IPJx4YquagKWIBO26J4f8tkZv2jTjmiIn0La5dNwwYh3TRcJCXX0QJxBWvWi3ZYwxOSpS4+LfmqZL69b/KPkxHjH2tSp2XV4WusISq22pgE17iwzuyXm8VHBL4O24xQNse3VwIK/Jhq/i6H2uRIZssLpc+/rpDb+qemITWzruMkeoekQWiLaQYpE0QeozUDApuL+L9ImtcNjrPh1yzV9iKxTa+YEDLZbN8uYwcLOUD3iI4UsnuYuFKi0jiNhhuaCCNGnbn8PCQLDOm/wF+Zycny5rnGnxuiZPv+O/tEdEII9EjDcNoDJRdfH19E=
 after_success:
 - echo "DOCKER_USER [" $DOCKER_USER "] DOCKER PASS [" $DOCKER_PASS "]"
 - docker login -u $DOCKER_USER -p $DOCKER_PASS
 - export REPO=tomgeorge/devbox
-- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH
-  ; fi`
-- docker tag devbox $REPO:$TAG
-- docker tag devbox $REPO:travis-$TRAVIS_BUILD_NUMBER
-- docker push $REPO:$TAG
+- docker tag devbox $REPO:$COMMIT
+- docker push $REPO:$COMMIT
+- docker tag devbox $REPO:latest
+- docker push $REPO:latest
