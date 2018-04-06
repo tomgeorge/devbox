@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Tom George
 
 # ENV http_proxy http://10.0.2.2:3128
@@ -12,7 +12,7 @@ ARG DOCKER_GID
 # ADD 01proxy /etc/apt/apt.conf.d
 
 RUN apt-get update && \
-        apt-get -q install -y vim \
+        apt-get install -y vim \
         software-properties-common \
         wget \
         curl \
@@ -28,11 +28,15 @@ RUN apt-get update && \
         ca-certificates \
         man \
         unzip \
-        ctags
+        ctags \
+        locales \
+        sudo
 
 RUN rm /etc/localtime && \
         ln -s /usr/share/zoneinfo/America/New_York /etc/localtime && \
-        locale-gen en_US.UTF-8
+        localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+ENV LANG en_US.utf8
 
 
 ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/bin/gosu
@@ -55,7 +59,7 @@ RUN cd /usr/local && \
                  touch /var/shared/placeholder && \
                  ln -s /var/shared/.ssh
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
 RUN groupadd -g $DOCKER_GID docker
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
