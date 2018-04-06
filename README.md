@@ -11,3 +11,5 @@ Then run `sh/provision_droplet.sh`.  This makes a user called `dev` with passwor
 Running `build.sh` builds the docker image.
 
 `make dev` runs the image and grabs voulmes from a gopath and ssh_keys image (to be automated)
+
+for now just run `make dev_ssh`, it assumes the ssh key image is there and not the git/go/minikube/kube volumes 
