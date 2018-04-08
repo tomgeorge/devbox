@@ -30,11 +30,14 @@ RUN apt-get update && \
         unzip \
         ctags \
         locales \
-        sudo
+        sudo \
+        ruby-full
 
 RUN rm /etc/localtime && \
         ln -s /usr/share/zoneinfo/America/New_York /etc/localtime && \
         localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+RUN gem install neovim
 
 ENV LANG en_US.utf8
 
