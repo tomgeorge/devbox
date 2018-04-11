@@ -2,6 +2,8 @@ ifeq ($(DOCKER_GID),)
 	DOCKER_GID := $(shell stat -c %g /var/run/docker.sock)
 endif
 
+build_base:
+	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
 build:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox .
 

@@ -1,15 +1,10 @@
 FROM ubuntu:16.04
 MAINTAINER Tom George
 
-# ENV http_proxy http://10.0.2.2:3128
-# ENV https_proxy https://10.0.2.2:3128
 ENV GO_VERSION 1.9.3.linux-amd64
 ENV KUBECTL_VERSION 1.9.0
 ENV ISTIO_VERSION 0.5.1
-
 ARG DOCKER_GID
-
-# ADD 01proxy /etc/apt/apt.conf.d
 
 RUN apt-get update && \
         apt-get install -y vim \
@@ -30,14 +25,11 @@ RUN apt-get update && \
         unzip \
         ctags \
         locales \
-        sudo \
-        ruby-full
+        sudo
 
 RUN rm /etc/localtime && \
         ln -s /usr/share/zoneinfo/America/New_York /etc/localtime && \
         localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
-RUN gem install neovim
 
 ENV LANG en_US.utf8
 
@@ -48,39 +40,21 @@ RUN chmod 775 /usr/local/bin/gosu
 RUN curl -L https://github.com/docker/compose/releases/download/1.19.0-rc2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && \
 	chmod +x /usr/local/bin/docker-compose
 
-
-
-ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
-RUN cd /usr/local && \
-        tar -xf go$GO_VERSION.tar.gz && \
-        rm go$GO_VERSION.tar.gz && \
-        mkdir -p /home/dev/go \
-                 /home/dev/bin \
-                 /home/dev/lib \
-                 /home/dev/include \
-                 /var/shared  && \
-                 touch /var/shared/placeholder && \
-                 ln -s /var/shared/.ssh
-
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
 RUN groupadd -g $DOCKER_GID docker
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
         add-apt-repository ppa:ansible/ansible && \
+        add-apt-repository ppa:brightbox/ruby-ng && \
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
         $(lsb_release -cs) \
         stable" && \
         apt-get update && \ 
-        apt-get install -y docker-ce neovim ansible && \
+        apt-get install -y docker-ce neovim ansible ruby-switch ruby2.2 ruby2.2-dev && \
         rm -rf /var/lib/apt/lists/*
 
-ENV PATH /home/dev/bin:/usr/local/go/bin:$PATH
-ENV LD_LIBRARY_PATH /home/dev/lib:$LD_LIBRARY_PATH
-
-VOLUME /var/shared
-
-WORKDIR /home/dev
 ENV HOME /home/dev
+WORKDIR /home/dev
 RUN mkdir -p /home/dev/.local/share/nvim/shada && \
         touch /home/dev/.local/share/nvim/shada/main.shada && \
         chmod -R 775 /home/dev/.local
@@ -91,12 +65,37 @@ RUN git clone https://github.com/tomgeorge/oh-my-zsh.git ~/.oh-my-zsh && \
         cd dotfiles && \
         ./links.sh
 
-RUN pip3 install neovim awscli && \
-        nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true && \
-        nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
+VOLUME /var/shared
+
 
 ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
+RUN pip3 install neovim && \
+        nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true && \
+        nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
+RUN gem install neovim
+
+ENTRYPOINT ["docker_entrypoint.sh"]
+CMD ["/usr/bin/zsh"]
+
+RUN pip3 install awscli 
+ADD https://dl.google.com/go/go$GO_VERSION.tar.gz /usr/local
+RUN cd /usr/local && \
+            tar -xf go$GO_VERSION.tar.gz && \
+        rm go$GO_VERSION.tar.gz && \
+        mkdir -p /home/dev/go \
+                 /home/dev/bin \
+                 /home/dev/lib \
+                 /home/dev/include \
+                 /var/shared  && \
+                 touch /var/shared/placeholder && \
+                 ln -s /var/shared/.ssh
+
+
+ENV PATH /home/dev/bin:/usr/local/go/bin:$PATH
+ENV LD_LIBRARY_PATH /home/dev/lib:$LD_LIBRARY_PATH
+
+
 
 RUN wget https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 && unzip terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 -d /usr/local/bin && rm terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482
 
@@ -110,5 +109,3 @@ RUN wget https://github.com/istio/istio/releases/download/0.5.1/istio-$ISTIO_VER
         chmod +x /usr/local/bin/istioctl && \
         rm -rf istio-$ISTIO_VERSION
 
-ENTRYPOINT ["docker_entrypoint.sh"]
-CMD ["/usr/bin/zsh"]
