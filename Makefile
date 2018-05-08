@@ -1,6 +1,8 @@
 ifeq ($(DOCKER_GID),)
-	DOCKER_GID := $(shell stat -c %g /var/run/docker.sock)
+	DOCKER_GID := $(shell stat -f %g /var/run/docker.sock)
 endif
+
+WHOAMI := $(shell whoami)
 
 build_base:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
@@ -25,3 +27,5 @@ dev:
 dev_ssh:
 	docker run --volumes-from ssh-keys -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
 	
+dev_local:
+	docker run --volumes-from ssh-keys -v $(HOME)/git:/home/dev/git -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest

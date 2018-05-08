@@ -42,7 +42,6 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.19.0-rc2/docke
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
-RUN groupadd -g $DOCKER_GID docker
 RUN add-apt-repository ppa:neovim-ppa/unstable && \
         add-apt-repository ppa:ansible/ansible && \
         add-apt-repository ppa:brightbox/ruby-ng && \
