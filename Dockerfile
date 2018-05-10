@@ -69,7 +69,8 @@ VOLUME /var/shared
 
 ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
-RUN pip3 install neovim && \
+RUN pip3 install --upgrade pip && \
+        pip3 install neovim && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
 RUN gem install neovim
@@ -98,13 +99,16 @@ ENV LD_LIBRARY_PATH /home/dev/lib:$LD_LIBRARY_PATH
 
 RUN wget https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 && unzip terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482 -d /usr/local/bin && rm terraform_0.11.2_linux_amd64.zip?_ga=2.104669568.1844800320.1517421482-308538760.1517421482
 
-RUN wget https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
-        chmod +x kubectl && \
-        mv kubectl /usr/local/bin
+RUN wget https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_amd64.zip && \
+        unzip packer_1.2.3_linux_amd64.zip -d /usr/local/bin
 
-RUN wget https://github.com/istio/istio/releases/download/0.5.1/istio-$ISTIO_VERSION-linux.tar.gz && \
-        tar -xf istio-$ISTIO_VERSION-linux.tar.gz && \
-        mv istio-$ISTIO_VERSION/bin/istioctl /usr/local/bin && \
-        chmod +x /usr/local/bin/istioctl && \
-        rm -rf istio-$ISTIO_VERSION
+#RUN wget https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
+#        chmod +x kubectl && \
+#    mv kubectl /usr/local/bin
+
+#RUN wget https://github.com/istio/istio/releases/download/0.5.1/istio-$ISTIO_VERSION-linux.tar.gz && \
+#        tar -xf istio-$ISTIO_VERSION-linux.tar.gz && \
+#        mv istio-$ISTIO_VERSION/bin/istioctl /usr/local/bin && \
+#        chmod +x /usr/local/bin/istioctl && \
+#        rm -rf istio-$ISTIO_VERSION
 
