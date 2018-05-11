@@ -69,8 +69,7 @@ VOLUME /var/shared
 
 ADD docker_entrypoint.sh /usr/local/bin
 RUN chmod 775 /usr/local/bin/docker_entrypoint.sh
-RUN pip3 install --upgrade pip && \
-        pip3 install neovim && \
+RUN pip3 install neovim && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c PluginInstall -c qa -V || true && \
         nvim -E -s -c "source ~/.config/nvim/init.vim" -c UpdateRemotePlugins -c qa -V || true
 RUN gem install neovim
