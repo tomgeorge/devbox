@@ -6,8 +6,8 @@ ENV KUBECTL_VERSION 1.9.0
 ENV ISTIO_VERSION 0.5.1
 ARG DOCKER_GID
 
-RUN apt-get update && \
-        apt-get install -y vim \
+RUN apt-get update 
+RUN apt-get install -y vim \
         software-properties-common \
         wget \
         curl \
@@ -25,7 +25,10 @@ RUN apt-get update && \
         unzip \
         ctags \
         locales \
-        sudo
+        sudo \
+        gnupg2
+
+RUN apt-file update
 
 RUN rm /etc/localtime && \
         ln -s /usr/share/zoneinfo/America/New_York /etc/localtime && \
