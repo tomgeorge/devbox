@@ -1,15 +1,16 @@
 ifeq ($(DOCKER_GID),)
-	DOCKER_GID := $(shell stat -f %g /var/run/docker.sock)
+	DOCKER_GID := $(shell stat -c %g /var/run/docker.sock)
 endif
 
 WHOAMI := $(shell whoami)
 
-build_base:
-	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
 build:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox .
 
-tag: build
+build_base:
+	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
+
+tag: 
 	docker tag devbox tomgeorge/devbox:latest
 
 login:
@@ -26,6 +27,9 @@ dev:
 
 dev_ssh:
 	docker run --volumes-from ssh-keys -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
+
+dev_ssh_git:
+	docker run --volumes-from ssh-keys --volumes-from git --net host -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
 	
 dev_local:
 	docker run  -v $(HOME)/.aws:/home/dev/.aws  --volumes-from ssh-keys -v $(HOME)/git:/home/dev/git -v /var/run/docker.sock:/var/run/docker.sock --net host -it tomgeorge/devbox:latest

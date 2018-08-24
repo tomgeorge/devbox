@@ -5,6 +5,7 @@ ENV GO_VERSION 1.9.3.linux-amd64
 ENV KUBECTL_VERSION 1.9.0
 ENV ISTIO_VERSION 0.5.1
 ARG DOCKER_GID
+ENV TERM xterm-256color
 
 RUN apt-get update 
 RUN apt-get install -y vim \
@@ -18,6 +19,9 @@ RUN apt-get install -y vim \
         build-essential \
         git \
         apt-file \
+	python-dev \
+	python-pip \
+	python3-dev \
         python3-pip \
         apt-transport-https \
         ca-certificates \
@@ -45,14 +49,14 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.19.0-rc2/docke
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
-RUN add-apt-repository ppa:neovim-ppa/unstable && \
-        add-apt-repository ppa:ansible/ansible && \
+RUN add-apt-repository ppa:ansible/ansible && \
+	add-apt-repository ppa:neovim-ppa/stable && \
         add-apt-repository ppa:brightbox/ruby-ng && \
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
         $(lsb_release -cs) \
         stable" && \
         apt-get update && \ 
-        apt-get install -y docker-ce neovim ansible ruby-switch ruby2.2 ruby2.2-dev && \
+        apt-get install -y neovim docker-ce ansible ruby-switch ruby2.2 ruby2.2-dev && \
         rm -rf /var/lib/apt/lists/*
 
 ENV HOME /home/dev
