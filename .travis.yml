@@ -3,7 +3,7 @@ languages: go
 services:
 - docker
 script:
-- DOCKER_GID=999 make
+- make
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::5}

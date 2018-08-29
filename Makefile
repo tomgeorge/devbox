@@ -1,11 +1,13 @@
-ifeq ($(DOCKER_GID),)
+ifeq ($(ITERM_PROFILE),Default)
+	DOCKER_GID := $(shell stat -f %g /var/run/docker.sock)
+else
 	DOCKER_GID := $(shell stat -c %g /var/run/docker.sock)
 endif
 
 WHOAMI := $(shell whoami)
 
 build:
-	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox .
+	docker build --build-arg DOCKER_GID=$(DOCKER_GID) --build-arg GPG_KEY=tgeorge.gpg -t devbox .
 
 build_base:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
