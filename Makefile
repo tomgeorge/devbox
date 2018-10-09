@@ -34,4 +34,7 @@ dev_ssh_git:
 	docker run --volumes-from ssh-keys --volumes-from git --net host -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
 	
 dev_local:
-	docker run  -v $(HOME)/.aws:/home/dev/.aws  --volumes-from ssh-keys -v $(HOME)/git:/home/dev/git -v /var/run/docker.sock:/var/run/docker.sock --net host -it tomgeorge/devbox:latest
+	docker run  -v $(HOME)/.aws:/home/dev/.aws  --volumes-from ssh-keys -v $(HOME)/git/Devops:/home/dev/git/Devops -v $(HOME)/git/mob-playbooks:/home/dev/git/mob-playbooks -v /var/run/docker.sock:/var/run/docker.sock --net host -it tomgeorge/devbox:latest
+
+dev_kube_do:
+	docker run  -v $(HOME)/.aws:/home/dev/.aws  --volumes-from ssh-keys -v $(HOME)/git/kubernetes-digitalocean-terraform:/home/dev/git/kubernetes-digitalocean-terraform -v $(HOME)/git/kubernetes-manifests:/home/dev/kubernetes-manifests -v /var/run/docker.sock:/var/run/docker.sock --net host -it tomgeorge/devbox:latest

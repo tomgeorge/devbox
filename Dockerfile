@@ -1,7 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER Tom George
 
-ARG GPG_KEY
 ARG DOCKER_GID
 ARG USER_ID=1000
 ARG USER_NAME=dev
@@ -9,7 +8,7 @@ ARG USER_NAME=dev
 ENV GO_VERSION 1.9.3.linux-amd64
 ENV KUBECTL_VERSION 1.9.0
 ENV ISTIO_VERSION 0.5.1
-ENV TERM xterm-256color
+ENV TERM screen-256color
 ENV USER_ID=${USER_ID}
 ENV USER_NAME=${USER_NAME}
 
@@ -70,8 +69,6 @@ RUN mkdir -p /home/$USER_NAME/.local/share/nvim/shada && \
         chmod -R 775 /home/$USER_NAME/.local
 
 
-ADD $GPG_KEY /home/$USER_NAME/gpgkey.gpg 
-RUN chown $USER_NAME:$USER_NAME /home/$USER_NAME/gpgkey.gpg
 RUN chown -R "${USER_NAME}":"${USER_NAME}" /home/"${USER_NAME}"
 
 USER $USER_NAME
