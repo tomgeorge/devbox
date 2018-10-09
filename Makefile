@@ -9,6 +9,9 @@ WHOAMI := $(shell whoami)
 build:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) --build-arg GPG_KEY=tgeorge.gpg -t devbox .
 
+build_no_cache:
+	docker build --build-arg DOCKER_GID=$(DOCKER_GID) --build-arg GPG_KEY=tgeorge.gpg --no-cache -t devbox .
+
 build_base:
 	docker build --build-arg DOCKER_GID=$(DOCKER_GID) -t devbox-base .
 

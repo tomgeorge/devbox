@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-MAINTAINER Tom George
 
 ARG DOCKER_GID
 ARG USER_ID=1000
@@ -20,7 +19,6 @@ RUN apt-get install -y vim \
         libcurl4-openssl-dev \
         zsh \
         dos2unix \
-        tmux \
         build-essential \
         git \
         apt-file \
@@ -35,9 +33,26 @@ RUN apt-get install -y vim \
         ctags \
         locales \
         sudo \
-        gnupg2
+        gnupg2 \
+        libevent-dev \
+        pkg-config \
+        libncurses5-dev \
+        automake \
+        openjdk-8-jdk
 
 RUN apt-file update
+
+RUN git clone https://github.com/tmux/tmux.git /tmp/tmux && \
+      cd /tmp/tmux && \
+      sh autogen.sh && \
+      ./configure && \
+      make && \
+      make install && \
+      rm -rf /tmp/tmux
+
+RUN curl -LO http://invisible-island.net/datafiles/current/terminfo.src.gz && \
+      gunzip terminfo.src.gz && \
+      tic -x terminfo.src
 
 RUN rm /etc/localtime && \
         ln -s /usr/share/zoneinfo/America/New_York /etc/localtime && \
@@ -63,6 +78,7 @@ RUN add-apt-repository ppa:ansible/ansible && \
 RUN useradd --shell /bin/bash -u $USER_ID -o -c "" -m $USER_NAME&& \
       echo "${USER_NAME}:${USER_NAME}" | chpasswd
 ENV HOME /home/$USER_NAME
+RUN mkdir -p /home/$USER_NAME/bin
 WORKDIR /home/$USER_NAME
 RUN mkdir -p /home/$USER_NAME/.local/share/nvim/shada && \
         touch /home/$USER_NAME/.local/share/nvim/shada/main.shada && \
@@ -70,12 +86,14 @@ RUN mkdir -p /home/$USER_NAME/.local/share/nvim/shada && \
 
 
 RUN chown -R "${USER_NAME}":"${USER_NAME}" /home/"${USER_NAME}"
+RUN chown -R "${USER_NAME}":"${USER_NAME}" /home/"${USER_NAME}"/bin
 
 USER $USER_NAME
 RUN git clone https://github.com/tomgeorge/oh-my-zsh.git ~/.oh-my-zsh && \
         git clone https://github.com/tomgeorge/dotfiles && \
         git clone https://github.com/tomgeorge/vimfiles /home/$USER_NAME/.vim && \
         cd dotfiles && \
+        git pull origin master && \
         ./links.sh
 
 RUN pip3 install neovim --user && \
