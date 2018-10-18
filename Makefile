@@ -34,7 +34,7 @@ dev_ssh:
 	docker run --volumes-from ssh-keys -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
 
 dev_ssh_git:
-	docker run --volumes-from ssh-keys --volumes-from git --net host -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
+	docker run --volumes-from ssh-keys --volumes-from git-repos -v /var/run/docker.sock:/var/run/docker.sock -it tomgeorge/devbox:latest
 	
 dev_local:
 	docker run  -v $(HOME)/.aws:/home/dev/.aws  --volumes-from ssh-keys -v $(HOME)/git/Devops:/home/dev/git/Devops -v $(HOME)/git/mob-playbooks:/home/dev/git/mob-playbooks -v /var/run/docker.sock:/var/run/docker.sock --net host -it tomgeorge/devbox:latest
